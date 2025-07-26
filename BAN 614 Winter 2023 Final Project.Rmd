@@ -8,14 +8,6 @@ output:
 ## Brendan Flynn
 
 ## 1. Data preparation and Exploratory Data Analysis
-* Follow concepts learnt in Week 2 to clean the data. If there are missing values then indicate how you
-plan to work with them.
-* Explore the data set and use data visualization to describe underlying trends. You can make observations on the distributions of each variable.
-* Report your detailed observations of any apparent relationship between customer status and each
-independent variable.
-* Create any new columns if you need to at this point.
-* Once you are done with the above, split the data set randomly into a training set (80%) and a test set
-(20%).
 
 ```{r}
 library(tidyverse)
