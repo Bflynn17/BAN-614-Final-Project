@@ -138,12 +138,10 @@ customer.test <- Customer_Retention_complete_data[-train,]
 customer.train
 ```
 ## 2. Logistic Regression
-* Use the training set to build a Logistic Regression model to predict the probability for losing a customer.
-* Try different combinations of variables and arrive at the model that maximizes AUC (Area Under the
+* Using the training set to build a Logistic Regression model to predict the probability for losing a customer.
+* Trying different combinations of variables and using a model that maximizes AUC (Area Under the
 Curve) for the ROC plots.
-* For the model with the highest AUC, interpret each coefficient and provide guidance to the reader on
-how varying the different variables will influence customer behavior.
-* Try different thresholds to identify the threshold with the highest prediction accuracy on the test set.
+
 
 
 ```{r}
@@ -168,7 +166,7 @@ roc(customer.test$Status,customer_thresholds$Probability_Left,plot=TRUE,print.au
 
 
 ```{r}
-# Looking for Improved Logistic Model without variables: Gender, Senior Citizen, Partner, Dependents, Phone Service, Online Security, Online Backup, Device Protection and Tech Support
+# Looking for an Improved Logistic Model without variables: Gender, Senior Citizen, Partner, Dependents, Phone Service, Online Security, Online Backup, Device Protection and Tech Support
 
 # Store the Logistic Regression model in Logistic Model
 LogisticModel.train <- glm(Status ~ Tenure + MultipleLines2 + InternetService + StreamingTV2 + StreamingMovies2 + Contract + PaperlessBilling + PaymentMethod + MonthlyCharges + TotalCharges,data = customer.train, family = binomial)
@@ -190,7 +188,7 @@ roc(customer.test$Status,customer_thresholds$Probability_Left,plot=TRUE,print.au
 
 
 ```{r}
-# Looking for Improved Logistic Model without variables: Senior Citizen, Partner, Dependents, Phone Service, Multiple Lines, Online Security, Device Protection and  Online Backup
+# Looking for an Improved Logistic Model without variables: Senior Citizen, Partner, Dependents, Phone Service, Multiple Lines, Online Security, Device Protection and  Online Backup
 
 # Store the Logistic Regression model in Logistic Model
 LogisticModel.train <- glm(Status ~ Gender + InternetService + Tenure + TechSupport2 + StreamingTV2 + StreamingMovies2 + Contract + PaperlessBilling + PaymentMethod + MonthlyCharges + TotalCharges,data = customer.train, family = binomial)
@@ -230,10 +228,10 @@ customer_thresholds <- data.frame(Probability_Left)
 roc(customer.test$Status,customer_thresholds$Probability_Left,plot=TRUE,print.auc=TRUE)
 ```
 ### Model Choice
-I ran three different logistical regression models with a different set of variables in each model. The 2nd model had the same AUC value as the last model but it was a simpler model, therefore, I will be using this model to make predictions.
+I ran three different logistical regression models with a different set of variables in each model. The 2nd model had the same AUC value as the last model, but it was a simpler model; therefore, I will be using this model to make predictions.
 
 ```{r}
-# Looking for Improved Logistic Model without variables: Gender, Senior Citizen, Partner, Dependents, Phone Service, Online Security, Online Backup, Device Protection and Tech Support
+# Looking for an Improved Logistic Model without variables: Gender, Senior Citizen, Partner, Dependents, Phone Service, Online Security, Online Backup, Device Protection, and Tech Support
 
 # Store the Logistic Regression model in Logistic Model
 LogisticModel.train <- glm(Status ~ Tenure + MultipleLines2 + InternetService + StreamingTV2 + StreamingMovies2 + Contract + PaperlessBilling + PaymentMethod + MonthlyCharges + TotalCharges,data = customer.train, family = binomial)
@@ -241,7 +239,7 @@ LogisticModel.train
 
 ```
 
-## Intepretation of Coefficients
+## Interpretation of Coefficients
 
 
 ### Tenure
@@ -250,7 +248,7 @@ LogisticModel.train
 odds_ratio_tenure <- exp(coef(LogisticModel.train)["Tenure"])
 odds_ratio_tenure
 ```
-The  log odds of a current customer leaving increase by .94 as the number of months as a customer increase by 1.
+The  log odds of a current customer leaving increase by .94 as the number of months as a customer increases by 1.
 
 
 ### Multiple Lines
@@ -393,11 +391,9 @@ I ran three different logistical regression models with a different set of varia
 
 
 ## 3. Naive Bayes
-* Use the training set to build a Naive Bayes model to predict the probability for losing a customer.
-* Try different combinations of variables and arrive at the model that maximizes AUC (Area Under the
+* Using the training set to build a Naive Bayes model to predict the probability of losing a customer.
+* Trying different combinations of variables and using a model that maximizes AUC (Area Under the Curve)
 Curve) for the ROC plots.
-* For the model with the highest AUC, try different thresholds to identify the threshold with the highest
-prediction accuracy on the test set.
 
 ```{r}
 # Convert all variables to factor 
@@ -432,7 +428,7 @@ Customer_Retention_complete_data <- Customer_Retention_complete_data %>%
 
 
 ```{r}
-# Create train and Test data set
+# Create train and test datasets
 set.seed(2)
 train <- sample(1:5599)
 customer.train <- Customer_Retention_complete_data[train,]
@@ -585,12 +581,10 @@ table(Customer.predictions.test.class0.6,customer.test$Status)
 
 
 ## 4. Linear Discriminant Analysis
-* Use the training set to build a model using Linear Discriminant Analysis to predict the probability
-for losing a customer.
-* Try different combinations of variables and arrive at the model that maximizes AUC (Area Under the
-Curve) for the ROC plots.
-* For the model with the highest AUC, try different thresholds to identify the threshold with the highest
-prediction accuracy on the test set.
+* Using the training set to build a model using Linear Discriminant Analysis to predict the probability
+of losing a customer.
+* Trying different combinations of variables and arriving at the model that maximizes AUC (Area Under the Curve)
+Curve)
 
 
 ```{r}
@@ -609,11 +603,11 @@ Customer_lda_pred <-predict(Customer_lda,customer.test)
 
 
 ```{r}
-# We can do it by accessing the list object *customer_lda_pred*. We first use the name *posterior* within double braces to access the matrix and then refer to the second column of the matrix using the square brackets. 
+# accessing the list object *customer_lda_pred*. Using the name *posterior* within double braces to access the matrix and then refer to the second column of the matrix using the square brackets. 
 
 Probability_Left <- Customer_lda_pred[["posterior"]][,2]
 
-# * We then save it as a data frame and then also add the actual customer values from the original data set.
+# *Saving it as a data frame and then adding the actual customer values from the original data set.
 
 customer_thresholds <- data.frame(Probability_Left)
 customer_thresholds$Actual_Left <- customer.test$Status
@@ -622,7 +616,7 @@ roc(customer_thresholds$Actual_Left,customer_thresholds$Probability_Left,plot=TR
 ```
 
 ```{r}
-# LDA Model with interaction Term
+# LDA Model with Interaction Term
 
 Customer_lda <- lda(Status ~ Gender + Partner + SeniorCitizen + Dependents + Tenure + PhoneService + MultipleLines2 + InternetService + OnlineSecurity2 + OnlineBackup2 + DeviceProtection2 + TechSupport2 + StreamingTV2 + StreamingMovies2 + Contract + PaperlessBilling + PaymentMethod + MonthlyCharges + TotalCharges + StreamingMovies2*StreamingTV2,data = customer.train)
 Customer_lda
@@ -637,12 +631,12 @@ Customer_lda_pred <-predict(Customer_lda,customer.test)
 ```{r}
 Probability_Left <- Customer_lda_pred[["posterior"]][,2]
 
-# * We then save it as a data frame and then also add the actual customer values from the original data set.
+# *Saving it as a data frame and then adding the actual customer values from the original data set.
 
 customer_thresholds <- data.frame(Probability_Left)
 customer_thresholds$Actual_Left <- customer.test$Status
 
-# We now add another column and assign classes based on the threshold of 40%. If the posterior is > 0.4 then we assign a "Left" , else "Current".
+# Adding another column and assigning classes based on the threshold of 40%. If the posterior is > 0.4, then assign a "Left", else "Current".
 
 customer_thresholds <- customer_thresholds %>% 
   mutate(Class_th_0.4 = ifelse(Probability_Left > 0.4, "Left", "Current"), Class_th_0.4 = factor(Class_th_0.4, levels=c("Left","Current")))
@@ -670,12 +664,12 @@ Customer_lda_pred <-predict(Customer_lda,customer.test)
 ```{r}
 Probability_Left <- Customer_lda_pred[["posterior"]][,2]
 
-# * We then save it as a data frame and then also add the actual customer values from the original data set.
+# * Saving it as a data frame and then adding the actual customer values from the original data set.
 
 customer_thresholds <- data.frame(Probability_Left)
 customer_thresholds$Actual_Left <- customer.test$Status
 
-# We now add another column and assign classes based on the threshold of 40%. If the posterior is > 0.2 then we assign a "Left" , else "Current".
+# Adding another column and assigning classes based on the threshold of 40%. If the posterior is > 0.2, then assign a "Left", else "Current".
 
 customer_thresholds <- customer_thresholds %>% 
   mutate(Class_th_0.4 = ifelse(Probability_Left > 0.4, "Left", "Current"), Class_th_0.4 = factor(Class_th_0.4, levels=c("Left","Current")))
@@ -686,7 +680,7 @@ customer_thresholds <- customer_thresholds %>%
 roc(customer_thresholds$Actual_Left,customer_thresholds$Probability_Left,plot=TRUE,print.auc=TRUE)
 ```
 ### Chosen Model
-All Three Models had the same AUC so I chose the simplest model which was the original model with all the variables.
+All Three Models had the same AUC, so I chose the simplest mode,l which was the original model with all the variables.
 
 ```{r}
 Customer_lda <- lda(Status ~ Gender + SeniorCitizen + Partner + Dependents + Tenure + PhoneService + MultipleLines2 + InternetService + OnlineSecurity2 + OnlineBackup2 + DeviceProtection2 + TechSupport2 + StreamingTV2 + StreamingMovies2 + Contract + PaperlessBilling + PaymentMethod + MonthlyCharges + TotalCharges,data = customer.train)
@@ -704,16 +698,16 @@ Customer_confusion_matrix <- confusionMatrix(Customer_lda_pred$class,customer.te
 Customer_confusion_matrix
 ```
 ```{r}
-# We can do it by accessing the list object *customer_lda_pred*. We first use the name *posterior* within double braces to access the matrix and then refer to the second column of the matrix using the square brackets. 
+# Accessing the list object *customer_lda_pred*. Use the name *posterior* within double braces to access the matrix and then refer to the second column of the matrix using the square brackets. 
 
 Probability_Left <- Customer_lda_pred[["posterior"]][,2]
 
-# * We then save it as a data frame and then also add the actual customer values from the original data set.
+# * Saving it as a data frame and then adding the actual customer values from the original data set.
 
 customer_thresholds <- data.frame(Probability_Left)
 customer_thresholds$Actual_Left <- customer.test$Status
 
-# We now add another column and assign classes based on the threshold of 40%. If the posterior is > 0.4 then we assign a "left" , else "current".
+# Adding another column and assigning classes based on the threshold of 40%. If the posterior is > 0.4, then assign a "left", else "current".
 
 customer_thresholds <- customer_thresholds %>% 
   mutate(Class_th_0.4 = ifelse(Probability_Left > 0.4, "Left", "Current"), Class_th_0.4 = factor(Class_th_0.4, levels=c("Left","Current")))
@@ -740,36 +734,34 @@ Confusion_Matrix
 
 
 ### Overall Takeaways
-All Three Models had the same AUC so I chose the simplest model which was the original model with all the variables. The ideal threshold is a 60% threshold for the probability of a customer leaving as this has the highest prediction accuracy of .7971. 
+All Three Models had the same AUC, so I chose the simplest mode,l which was the original model with all the variables. The ideal threshold is a 60% threshold for the probability of a customer leaving as this has the highest prediction accuracy of .7971. 
 
 ## 5. Quadratic Discriminant Analysis
-* Use the training set to build a model using Quadratic Discriminant Analysis to predict the probability
-for losing a customer.
-* Try different combinations of variables and arrive at the model that maximizes AUC (Area Under the
+* Using the training set to build a model using Quadratic Discriminant Analysis to predict the probability
+of losing a customer.
+* Trying different combinations of variables and arrive at the model that maximizes AUC (Area Under the Curve)
 Curve) for the ROC plots.
-* For the model with the highest AUC, try different thresholds to identify the threshold with the highest
-prediction accuracy on the test set.
 
 
 ```{r}
-# Building an QDA Model
+# Building a QDA Model
 Customer_qda <- qda(Status ~ Gender + Partner+ SeniorCitizen + Dependents + Tenure + PhoneService + MultipleLines2 + InternetService + OnlineSecurity2 + OnlineBackup2 + DeviceProtection2 + TechSupport2 + StreamingTV2 + StreamingMovies2 + Contract + PaperlessBilling + PaymentMethod + MonthlyCharges + TotalCharges,data = customer.train)
 Customer_qda
 ```
 ```{r}
-# Making Predictions with QDA model
+# Making Predictions with QDA Model
 Customer_qda_pred <-predict(Customer_qda,customer.test)
 ```
 
 ```{r}
 Probability_Left <- Customer_qda_pred[["posterior"]][,2]
 
-# * We then save it as a data frame and then also add the actual customer values from the original data set.
+# * Saving it as a data frame and  adding the actual customer values from the original data set.
 
 customer_thresholds <- data.frame(Probability_Left)
 customer_thresholds$Actual_Left <- customer.test$Status
 
-# We now add another column and assign classes based on the threshold of 40%. If the posterior is > 0.40 then we assign a "Left" , else "Current".
+# Adding another column and assigning classes based on the threshold of 40%. If the posterior is > 0.40 then assign a "Left" , else "Current".
 
 customer_thresholds <- customer_thresholds %>% 
   mutate(Class_th_0.4 = ifelse(Probability_Left > 0.4, "Left", "Current"), Class_th_0.4 = factor(Class_th_0.4, levels=c("Left","Current")))
@@ -792,12 +784,12 @@ Customer_qda_pred <-predict(Customer_qda,customer.test)
 ```{r}
 Probability_Left <- Customer_qda_pred[["posterior"]][,2]
 
-# * We then save it as a data frame and then also add the actual customer values from the original data set.
+# * Saving it as a data frame and then adding the actual customer values from the original data set.
 
 customer_thresholds <- data.frame(Probability_Left)
 customer_thresholds$Actual_Left <- customer.test$Status
 
-# We now add another column and assign classes based on the threshold of 40%. If the posterior is > 0.40 then we assign a "Left" , else "Current".
+# Adding another column and assigning classes based on the threshold of 40%. If the posterior is > 0.40 then assign a "Left" , else "Current".
 
 customer_thresholds <- customer_thresholds %>% 
   mutate(Class_th_0.4 = ifelse(Probability_Left > 0.4, "Left", "Current"), Class_th_0.4 = factor(Class_th_0.4, levels=c("Left","Current")))
@@ -821,12 +813,12 @@ Customer_qda_pred <-predict(Customer_qda,customer.test)
 ```{r}
 Probability_Left <- Customer_qda_pred[["posterior"]][,2]
 
-# * We then save it as a data frame and then also add the actual customer values from the original data set.
+# * Saving it as a data frame and then adding the actual customer values from the original data set.
 
 customer_thresholds <- data.frame(Probability_Left)
 customer_thresholds$Actual_Left <- customer.test$Status
 
-# We now add another column and assign classes based on the threshold of 40%. If the posterior is > 0.40 then we assign a "Left" , else "Current".
+# Adding another column and assigning classes based on the threshold of 40%. If the posterior is > 0.40 then assign a "Left", else "Current".
 
 customer_thresholds <- customer_thresholds %>% 
   mutate(Class_th_0.4 = ifelse(Probability_Left > 0.4, "Left", "Current"), Class_th_0.4 = factor(Class_th_0.4, levels=c("Left","Current")))
@@ -837,7 +829,7 @@ customer_thresholds <- customer_thresholds %>%
 roc(customer_thresholds$Actual_Left,customer_thresholds$Probability_Left,plot=TRUE,print.auc=TRUE)
 ```
 ### Model Choice
-* The Last Model using the Square root of the total Charges has the highest area under the curve, therefore I will be using it for analysis. 
+* The Last Model using the Square root of the total Charges has the highest area under the curve; therefore, I will be using it for analysis. 
 
 ```{r}
 # Confusion Matrix on QDA Model
@@ -865,11 +857,11 @@ Confusion_Matrix
 
 ```
 
-### Overall Takeways
-The best model is the squared root of total charges. The ideal threshold is a 60% threshold for the probability of a customer leaving as this has the highest prediction accuracy of .7743
+### Overall Takeaways
+The best model is the square root of total charges. The ideal threshold is a 60% threshold for the probability of a customer leaving, as this has the highest prediction accuracy of .7743
 
 ## 6. Decision Trees
-* Use the training set to build a Decision Tree model to predict the probability for losing a customer.
+* Use the training set to build a Decision Tree model to predict the probability of losing a customer.
 * Try different combinations of variables and identify the model with the largest prediction accuracy.
 
 ```{r}
@@ -898,27 +890,27 @@ tree.Customer.train
 # set seed for reproducibility of analysis
 set.seed(3)
 
-# Use cross validation to determine the optimal level of tree complexity. Cost complexity pruning is used. Use *FUN = prune.misclass* in order to indicate that we want the classification error rate to guide the cross-validation and pruning process. Else the default measure is deviance.
+# Using cross-validation to determine the optimal level of tree complexity. Cost complexity pruning is used. Use *FUN = prune.misclass* to indicate that we want the classification error rate to guide the cross-validation and pruning process. Else, the default measure is deviance.
 cv.Customer <- cv.tree(tree.Customer.train, FUN = prune.misclass)
 
-# The output from above code is a list object. It reports the number of terminal nodes of each tree considered (size), the corresponding error rate (dev), the value of the cost-complexity parameter used (k) and the method used (misclass)
+# The output from the above code is a list object. It reports the number of terminal nodes of each tree considered (size), the corresponding error rate (dev), the value of the cost-complexity parameter used (k), and the method used (misclass)
 str(cv.Customer)
 ```
 
-Looking at the *dev* and *size* data above it looks like the tree with 6 terminal nodes results in the lowest error rate. We can plot the error rate as a function of both *size* and *k*
+Looking at the *dev* and *size* data above, it looks like the tree with 6 terminal nodes results in the lowest error rate. Can plot the error rate as a function of both *size* and *k*
 
 ```{r echo = TRUE}
-# This commands helps in creating space to fit multiple plots. *mfrow = c(1,2)* will take a row and split it into two columns. Once you define this space then every plot that create later will be filled into these spaces. 
+# These commands help in creating space to fit multiple plots. *mfrow = c(1,2)* will take a row and split it into two columns. Once you define this space, then every plot that you  create later will be filled into these spaces. 
 par(mfrow = c(1,2))
 
-# We created space for two plots. Here is the first plot. This will show up on the left hand side. The "type = b" plots both points and lines connecting the points. First argument in the plot function is the X axis data and the second argument is the Y-axis data
+# Created space for two plots. Here is the first plot. This will show up on the left-hand side. The "type = b" plots both points and lines connecting the points. The first argument in the plot function is the X-axis data, and the second argument is the Y-axis data
 plot(cv.Customer$size, cv.Customer$dev, type = "b")
 
-# This second plot will show up on the right hand side
+# This second plot will show up on the right-hand side
 plot(cv.Customer$k, cv.Customer$dev, type = "b")
 ```
 
-We now apply the *prune.misclass()* function in order to prune the tree to obtain the number of terminal nodes we want.
+ Applying the *prune.misclass()* function to prune the tree to obtain the number of terminal nodes we want.
 
 ```{r echo = TRUE}
 # Prune the tree to the required number of terminal nodes
@@ -938,7 +930,7 @@ tree.pred.test <- predict(tree.Customer.train, customer.test, type = "class")
 # The output from the above code will be a vector of predictions
 str(tree.pred.test)
 
-# Create the confusion matrix using the predictions vector along with the actual classification present in the test data
+# Creating the confusion matrix using the predictions vector along with the actual classification present in the test data
 table(tree.pred.test,Status.test)
 ```
 
@@ -948,7 +940,7 @@ table(tree.pred.test,Status.test)
 ```
 
 ```{r}
-# Building the Decision Tree Model without variable contract
+# Building the Decision Tree Model without a variable contract
 tree.Customer.train <- tree(Status ~ Gender + SeniorCitizen + Partner + Dependents + Tenure + PhoneService + MultipleLines2 + InternetService + OnlineSecurity2 + OnlineBackup2 + DeviceProtection2 + TechSupport2 + StreamingTV2 + StreamingMovies2 + PaperlessBilling + PaymentMethod + MonthlyCharges + TotalCharges, customer.train)
 ```
 
@@ -969,23 +961,23 @@ tree.Customer.train
 # set seed for reproducibility of analysis
 set.seed(3)
 
-# Use cross validation to determine the optimal level of tree complexity. Cost complexity pruning is used. Use *FUN = prune.misclass* in order to indicate that we want the classification error rate to guide the cross-validation and pruning process. Else the default measure is deviance.
+# Using cross-validation to determine the optimal level of tree complexity. Cost complexity pruning is used. Using *FUN = prune.misclass* in order to indicate that the classification error rate is used to guide the cross-validation and pruning process. Else, the default measure is deviance.
 cv.Customer <- cv.tree(tree.Customer.train, FUN = prune.misclass)
 
-# The output from above code is a list object. It reports the number of terminal nodes of each tree considered (size), the corresponding error rate (dev), the value of the cost-complexity parameter used (k) and the method used (misclass)
+# The output from the above code is a list object. It reports the number of terminal nodes of each tree considered (size), the corresponding error rate (dev), the value of the cost-complexity parameter used (k) and the method used (misclass)
 str(cv.Customer)
 ```
 
 ```{r}
-#Looking at the *dev* and *size* data above it looks like the tree with 12 terminal nodes results in the lowest error rate. We can plot the error rate as a function of both *size* and *k*
+#Looking at the *dev* and *size* data above, it looks like the tree with 12 terminal nodes results in the lowest error rate. We can plot the error rate as a function of both *size* and *k*
 
-# This commands helps in creating space to fit multiple plots. *mfrow = c(1,2)* will take a row and split it into two columns. Once you define this space then every plot that create later will be filled into these spaces. 
+# These commands help in creating space to fit multiple plots. *mfrow = c(1,2)* will take a row and split it into two columns. Once you define this space, then every plot that you create later will be filled into these spaces. 
 par(mfrow = c(1,2))
 
-# We created space for two plots. Here is the first plot. This will show up on the left hand side. The "type = b" plots both points and lines connecting the points. First argument in the plot function is the X axis data and the second argument is the Y-axis data
+# Created space for two plots. Here is the first plot. This will show up on the left-hand side. The "type = b" plots both points and lines connecting the points. The first argument in the plot function is the X-axis data, and the second argument is the Y-axis data
 plot(cv.Customer$size, cv.Customer$dev, type = "b")
 
-# This second plot will show up on the right hand side
+# This second plot will show up on the right-hand side
 plot(cv.Customer$k, cv.Customer$dev, type = "b")
 ```
 
@@ -1017,7 +1009,7 @@ table(tree.pred.test,Status.test)
 ```
 
 ```{r}
-# Building the Decision Tree Model without variables Tech Support, Streaming TV, Steaming Movies and device protection
+# Building the Decision Tree Model without variables: Tech Support, Streaming TV, Streaming Movies, and device protection
 tree.Customer.train <- tree(Status ~ Gender + SeniorCitizen + Partner + Dependents + Contract + Tenure + PhoneService + MultipleLines2 + InternetService + OnlineSecurity2 + OnlineBackup2 + PaperlessBilling + PaymentMethod + MonthlyCharges + TotalCharges, customer.train)
 ```
 
@@ -1038,20 +1030,20 @@ tree.Customer.train
 # set seed for reproducibility of analysis
 set.seed(3)
 
-# Use cross validation to determine the optimal level of tree complexity. Cost complexity pruning is used. Use *FUN = prune.misclass* in order to indicate that we want the classification error rate to guide the cross-validation and pruning process. Else the default measure is deviance.
+# Using cross-validation to determine the optimal level of tree complexity. Cost complexity pruning is used. Use *FUN = prune.misclass* to indicate that we want the classification error rate to guide the cross-validation and pruning process. Else, the default measure is deviance.
 cv.Customer <- cv.tree(tree.Customer.train, FUN = prune.misclass)
 
-# The output from above code is a list object. It reports the number of terminal nodes of each tree considered (size), the corresponding error rate (dev), the value of the cost-complexity parameter used (k) and the method used (misclass)
+# The output from the above code is a list object. It reports the number of terminal nodes of each tree considered (size), the corresponding error rate (dev), the value of the cost-complexity parameter used (k), and the method used (misclass)
 str(cv.Customer)
 ```
 
 ```{r}
-#Looking at the *dev* and *size* data above it looks like the tree with 12 terminal nodes results in the lowest error rate. We can plot the error rate as a function of both *size* and *k*
+#Looking at the *dev* and *size* data above, it looks like the tree with 12 terminal nodes results in the lowest error rate. We can plot the error rate as a function of both *size* and *k*
 
-# This commands helps in creating space to fit multiple plots. *mfrow = c(1,2)* will take a row and split it into two columns. Once you define this space then every plot that create later will be filled into these spaces. 
+# These commands help in creating space to fit multiple plots. *mfrow = c(1,2)* will take a row and split it into two columns. Once you define this space, then every plot thatyou  create later will be filled into these spaces. 
 par(mfrow = c(1,2))
 
-# We created space for two plots. Here is the first plot. This will show up on the left hand side. The "type = b" plots both points and lines connecting the points. First argument in the plot function is the X axis data and the second argument is the Y-axis data
+# Created space for two plots. Here is the first plot. This will show up on the left-hand side. The "type = b" plots both points and lines connecting the points. The first argument in the plot function is the X-axis data, and the second argument is the Y-axis data
 plot(cv.Customer$size, cv.Customer$dev, type = "b")
 
 # This second plot will show up on the right hand side
@@ -1085,47 +1077,41 @@ table(tree.pred.test,Status.test)
 (960+150)/(960+150+230+60)*100
 ```
 ### Overall Takeaways
-The original model and the last model without the variables Tech Support, Streaming TV, Steaming Movies and device protection had the same prediction accuracy of 79.28. The last model is a simpler model, with fewer variables, so this is the best model. 
+The original model and the last model without the variables Tech Support, Streaming TV, Streaming Movies and device protection had the same prediction accuracy of 79.28. The last model is a simpler model, with fewer variables, so this is the best model. 
 
 
 ## 7. Comparison across Methods
-* Compare across methods (skip the model built with decision trees) used above and report your best
-method based on ROC plots.
-* Which model does the best in terms of the prediction accuracy on the test set? Include the decision
-tree model here.
-* As a person in charge of making business decisions, what else are you learning from the results you are
-seeing from all these methods?
 
 
 ### Best Method based on ROC plot
 The best model based on the maximum AUC value of .841. It was a logistic model without the variables Gender, Senior Citizen, Partner, Dependents, Phone Service, Online Security, Online Backup, Device Protection and Tech Support.
 
 ### Best Model based on Prediction Accuracy
- The best model based on prediction accuracy had an a prediction accuracy value of 79.8% and a threshold of 0.55. It was also the logistic model without the variables Gender, Senior Citizen, Partner, Dependents, Phone Service, Online Security, Online Backup, Device Protection and Tech Support.
+ The best model based on prediction accuracy had a prediction accuracy value of 79.8% and a threshold of 0.55. It was also the logistic model without the variables Gender, Senior Citizen, Partner, Dependents, Phone Service, Online Security, Online Backup, Device Protection, and Tech Support.
 
 ### General Takeaways 
-Based on running different models I found variables that are more and less effective in determining whether the status of the customer. Variables such as gender, dependent and partner are among the least effective variables. While running different models, I found dropping these variables in models had no effect on the maximum AUC values or the model improved without these variables. On the contrary, variables such as tenure, contract, internet service and total charges are among the most effective variables in determining the status of the customer. Including these variables in models produced high AUC values. The variables tenure,contract and internet services were the most significant variables in the decision tree.
+Based on running different models, I identified variables that are more and less effective in determining the customer's status. Variables such as gender, dependents, and partner are among the least effective. When I removed these variables from the models, it did not affect the maximum AUC values or improve the model's performance without them. Conversely, variables like tenure, contract, internet service, and total charges are among the most influential in determining the customer's status. Including these variables in the models resulted in high AUC values. The variables tenure, contract, and internet service were the most significant in the decision tree.
 
 ## 8. Business Analysis and Recommendations
-Pretend that the training dataset reflects the past and that the test data set captures the customers we are
+Pretend that the training dataset reflects the past and that the test dataset captures the customers we are
 concerned about currently. Use your logistic regression model with your best threshold (identified in part 2)
 to answer the following questions:
-* In terms of relative importance how would you rate the predictors in your model. As a business
-manager, which factors would you focus on (for example you could invest in offering some incentives
+* In terms of relative importance, how would you rate the predictors in your model? As a business
+manager, which factors would you focus on (for example, you could invest in offering some incentives
 or promotions) to decrease the chances of customers leaving?
 
 * Collect all the customers from the test dataset that your model says are going to leave. What is the
 predicted loss in revenue per month if all these customers leave? This reflects the loss if no action is
 taken
 * Propose an incentive scheme to your manager that can help reduce the loss in revenue by retaining
-some (or all) customers. Provide justification by evaluating costs and benefits of your incentive scheme.
+some (or all) customers. Justify by evaluating the costs and benefits of your incentive scheme.
 Costs will be the dollar amount in incentives given (for example). Benefits will be the revenues from
 these customers if they stay with your company. Compute the net benefits from your incentive scheme.
 Make a case in your report to your upper management for implementing your scheme.
 
 ### Logistic Model with Best Threshold
 ```{r}
-# Looking for Improved Logistic Model without variables: Gender, Senior Citizen, Partner, Dependents, Phone Service, Online Security, Online Backup, Device Protection and Tech Support
+# Looking for an Improved Logistic Model without variables: Gender, Senior Citizen, Partner, Dependents, Phone Service, Online Security, Online Backup, Device Protection and Tech Support
 
 # Store the Logistic Regression model in Logistic Model
 LogisticModel.train <- glm(Status ~ Tenure + MultipleLines2 + InternetService + StreamingTV2 + StreamingMovies2 + Contract + PaperlessBilling + PaymentMethod + MonthlyCharges + TotalCharges,data = customer.train, family = binomial)
@@ -1154,7 +1140,7 @@ table(Prediction_Classes,customer.test$Status)
 (938+180)/(938+200+82+180)*100
 ```
 ### Variables to focus on 
-I think the top variables to focus on are tenure and contract. The goal of a company is to always grow and gain customers,but also keep their existing customers. I have explained below a proposed incentive to increase the customer tenure. Additionally, an incentive should also be implemented for contracts to keep customers at the company.       
+I believe the top variables to focus on are tenure and contract. The goal of a company is to always grow and attract new customers, but also retain its existing ones. I have outlined below a proposed incentive to increase customer tenure. Additionally, there should also be an incentive in place for contracts to help keep customers with the company.       
 
 ### Loss of Revenue if Customers Leave
 
@@ -1214,5 +1200,5 @@ table(Prediction_Classes,customer.test$Status)
 (976+130)/(976+130+250+44)*100
 ```
 ### Incentive Model
-My idea for an incentive model is to give discounts for customers based on the tenure as a customer. I noticed while looking at the initial distribution after 10 months a significant drop off in customers. Furthermore, my idea is to give $5 off monthly charges for customers who have been with the company for 10 months and longer. I created a sample model with the incentive implemented in the model. The prediction accuracy is on par with the best model. The costs of this change will be the loss in awarding the discounts to customers who have been with the customer for 10 months and longer. The benefits will be keeping existing customers for a longer period of time. In the future, a cost benefit analysis should be performed to analyze the logistics of this idea.
+My idea for an incentive model is to offer discounts to customers based on their tenure as customer. I noticed that after 10 months, there is a significant drop-off in customer retention. Therefore, I propose giving $5 off monthly charges to customers who have been with the company for 10 months or longer. I developed a sample model incorporating this incentive, and its prediction accuracy is comparable to the best model. The costs of this approach include the loss of revenue from discounts given to long-term customers. The main benefit is retaining existing customers for a longer period. In the future, a cost-benefit analysis should be conducted to evaluate the logistics of this idea.
 
